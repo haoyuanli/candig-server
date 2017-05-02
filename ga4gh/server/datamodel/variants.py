@@ -717,11 +717,11 @@ class HtslibVariantSet(datamodel.PysamDatamodelMixin, AbstractVariantSet):
         call_genotypes = [call.genotype for call in variant.calls]
 
         def gtlist_to_gtenum(gtlist):
-            hemi = [ genotype_service_pb2.Genotype.HEMIZYGOUS_REF,
-                     genotype_service_pb2.Genotype.HEMIZYGOUS_ALT ] 
-            hetero = [ genotype_service_pb2.Genotype.HOMOZYGOUS_REF,
-                       genotype_service_pb2.Genotype.HETEROZYGOUS_ALT,
-                       genotype_service_pb2.Genotype.HOMOZYGOUS_ALT ]
+            hemi = [protocol.Genotype.HEMIZYGOUS_REF,
+                    protocol.Genotype.HEMIZYGOUS_ALT]
+            hetero = [protocol.Genotype.HOMOZYGOUS_REF,
+                      protocol.Genotype.HETEROZYGOUS_ALT,
+                      protocol.Genotype.HOMOZYGOUS_ALT]
 
             if len(gtlist) > 2:
                 return genotype_service_pb2.Genotype.OTHER
@@ -734,12 +734,11 @@ class HtslibVariantSet(datamodel.PysamDatamodelMixin, AbstractVariantSet):
 
         genotype_list = [gtlist_to_getenum(call_gt) for call_gt in call_genotypes]
         variant.calls = []
-        gtmatrix = genotype_service_pb2.GenotypeMatrix()
+        gtmatrix = protocol.GenotypeMatrix()
         gtmatrix.nvariants = 1
         gtmatrix.nindividuals = len(genotype_list)
         gtmatrix.genotypes.extend(genotype_list)
         return gtmatrix, variant
-    
 
     def getVariant(self, compoundId):
         if compoundId.reference_name in self._chromFileMap:
@@ -793,8 +792,8 @@ class HtslibVariantSet(datamodel.PysamDatamodelMixin, AbstractVariantSet):
                 referenceName, startPosition, endPosition):
             yield self.convertVariant(record, callSetIds)
 
-    def getGenotypeResponse(self, referenceName, startPosition, endPosition,
-                    callSetIds=[]):
+    def getGenotypeMatrix(self, referenceName, startPosition, endPosition,
+                          callSetIds=[]):
         """
         Returns an iterator over the specified variants. The parameters
         correspond to the attributes of a GASearchVariantsRequest object.

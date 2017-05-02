@@ -350,8 +350,8 @@ class Backend(object):
 
     def genotypeMatrixGenerator(self, request):
         """
-        Returns a generator over the (genotypematrix, nextPageToken) pairs defined
-        by the specified request.
+        Returns a generator over the (genotypematrix, nextPageToken) pairs
+        defined by the specified request.
         """
         compoundId = datamodel.VariantSetCompoundId \
             .parse(request.variant_set_id)
@@ -593,12 +593,12 @@ class Backend(object):
         """
         Runs the specified request. The request is a string containing
         a JSON representation of an instance of the specified requestClass.
-	We return a string representation of an instance of the
-	specified responseClass in return_mimetype format. Objects
-	are filled into the page list using the specified object
-	generator, which must return (object, nextPageToken) pairs,
-	and be able to resume iteration from any point using the
-	nextPageToken attribute of the request object.
+        We return a string representation of an instance of the
+        specified responseClass in return_mimetype format. Objects
+        are filled into the page list using the specified object
+        generator, which must return (object, nextPageToken) pairs,
+        and be able to resume iteration from any point using the
+        nextPageToken attribute of the request object.
         """
         self.startProfile()
         try:
@@ -668,9 +668,9 @@ class Backend(object):
         return protocol.serialize(response, return_mimetype)
 
     def runSearchGenotypesRequest(self, requestStr,
-                           return_mimetype="application/json"):
+                                  return_mimetype="application/json"):
         """
-        Runs a searchGenotypes request for the specified 
+        Runs a searchGenotypes request for the specified
         request arguments.
 
         Can't just use runSearchRequest because we're appending
@@ -698,7 +698,7 @@ class Backend(object):
         for genotypemtx, variant, nextPageToken in objectGenerator(request):
             genotyperows.append(genotypemtx)
             variants.append(variant)
-        
+
         response.genotypes.nindividuals = len(genotyperows[0])
         response.genotypes.nvariants = len(variants)
         for genotyperow in genotyperows:
