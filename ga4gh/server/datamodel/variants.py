@@ -724,15 +724,15 @@ class HtslibVariantSet(datamodel.PysamDatamodelMixin, AbstractVariantSet):
                       protocol.Genotype.HOMOZYGOUS_ALT]
 
             if len(gtlist) > 2:
-                return genotype_service_pb2.Genotype.OTHER
+                return protocol.Genotype.OTHER
 
             sumgt = sum(gtlist)
             if len(gtlist) == 1:
-                return hemi[sumgt] 
+                return hemi[sumgt]
             else:
-                return hetero[sumgt] 
+                return hetero[sumgt]
 
-        genotype_list = [gtlist_to_getenum(call_gt) for call_gt in call_genotypes]
+        genotype_list = [gtlist_to_gtenum(callgt) for callgt in call_genotypes]
         variant.calls = []
         gtmatrix = protocol.GenotypeMatrix()
         gtmatrix.nvariants = 1
