@@ -204,6 +204,24 @@ class VariantsIntervalIterator(IntervalIterator):
         return variant.end
 
 
+class GenotypesIntervalIterator(IntervalIterator):
+    """
+    An interval iterator for variants
+    """
+    def _search(self, start, end):
+        return self._parentContainer.getGenotypeMatrix(
+            self._request.reference_name, start, end,
+            self._request.call_set_ids)
+
+    @classmethod
+    def _getStart(cls, variant):
+        return variant.start
+
+    @classmethod
+    def _getEnd(cls, variant):
+        return variant.end
+
+
 class VariantAnnotationsIntervalIterator(IntervalIterator):
     """
     An interval iterator for annotations

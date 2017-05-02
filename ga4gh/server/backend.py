@@ -348,6 +348,19 @@ class Backend(object):
             request, variantSet)
         return intervalIterator
 
+    def genotypeMatrixGenerator(self, request):
+        """
+        Returns a generator over the (genotypematrix, nextPageToken) pairs defined
+        by the specified request.
+        """
+        compoundId = datamodel.VariantSetCompoundId \
+            .parse(request.variant_set_id)
+        dataset = self.getDataRepository().getDataset(compoundId.dataset_id)
+        variantSet = dataset.getVariantSet(compoundId.variant_set_id)
+        intervalIterator = paging.GenotypesIntervalIterator(
+            request, variantSet)
+        return intervalIterator
+
     def variantAnnotationsGenerator(self, request):
         """
         Returns a generator over the (variantAnnotaitons, nextPageToken) pairs
@@ -580,11 +593,12 @@ class Backend(object):
         """
         Runs the specified request. The request is a string containing
         a JSON representation of an instance of the specified requestClass.
-        We return a string representation of an instance of the specified
-        responseClass in JSON format. Objects are filled into the page list
-        using the specified object generator, which must return
-        (object, nextPageToken) pairs, and be able to resume iteration from
-        any point using the nextPageToken attribute of the request object.
+	We return a string representation of an instance of the
+	specified responseClass in return_mimetype format. Objects
+	are filled into the page list using the specified object
+	generator, which must return (object, nextPageToken) pairs,
+	and be able to resume iteration from any point using the
+	nextPageToken attribute of the request object.
         """
         self.startProfile()
         try:
@@ -651,6 +665,50 @@ class Backend(object):
         response.sequence = sequence
         if nextPageToken:
             response.next_page_token = nextPageToken
+        return protocol.serialize(response, return_mimetype)
+
+    def runSearchGenotypesRequest(self, requestStr,
+                           return_mimetype="application/json"):
+        """
+        Runs a searchGenotypes request for the specified 
+        request arguments.
+
+        Can't just use runSearchRequest because we're appending
+        multiple things - the variants and the genotype matrix
+        """
+        self.startProfile()
+        requestClass = protocol.SearchGenotypesRequest
+        responseClass = protocol.SearchGenotypesResponse
+        objectGenerator = self.genotypeMatrixGenerator
+
+        try:
+            request = protocol.fromJson(requestStr, requestClass)
+        except protocol.json_format.ParseError:
+            raise exceptions.InvalidJsonException(requestStr)
+
+        response = responseClass()
+        response.genotypes.nvariants = 0
+        response.genotypes.nindividuals = 0
+
+        # to heck with paging for now
+        # and to heck with call set ids too
+
+        genotyperows = []
+        variants = []
+        for genotypemtx, variant, nextPageToken in objectGenerator(request):
+            genotyperows.append(genotypemtx)
+            variants.append(variant)
+        
+        response.genotypes.nindividuals = len(genotyperows[0])
+        response.genotypes.nvariants = len(variants)
+        for genotyperow in genotyperows:
+            response.genotypes.genotypes.extend(genotyperow)
+
+        for variant in variants:
+            response.variants.add(variant)
+
+        response.next_page_token = nextPageToken
+
         return protocol.serialize(response, return_mimetype)
 
     # Get requests.
@@ -976,6 +1034,12 @@ class Backend(object):
             protocol.SearchVariantsResponse,
             self.variantsGenerator,
             return_mimetype)
+
+    def runSearchGenotypes(self, request, return_mimetype):
+        """
+        Runs the specified SearchVariantRequest.
+        """
+        return self.runSearchGenotypesRequest(request, return_mimetype)
 
     def runSearchVariantAnnotations(self, request, return_mimetype):
         """
