@@ -712,8 +712,6 @@ class Backend(object):
         response.variants.extend(variants)
         response.call_set_ids.extend(callsetIds)
 
-        response.next_page_token = str(nextPageToken)
-
         return protocol.serialize(response, return_mimetype)
 
     # Get requests.
