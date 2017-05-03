@@ -214,11 +214,13 @@ class GenotypesIntervalIterator(IntervalIterator):
             self._request.call_set_ids)
 
     @classmethod
-    def _getStart(cls, variant):
+    def _getStart(cls, gt_variant):
+        genotype, variant, callsets = gt_variant
         return variant.start
 
     @classmethod
-    def _getEnd(cls, variant):
+    def _getEnd(cls, gt_variant):
+        genotype, variant, callsets = gt_variant
         return variant.end
 
 

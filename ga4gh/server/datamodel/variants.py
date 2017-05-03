@@ -717,28 +717,30 @@ class HtslibVariantSet(datamodel.PysamDatamodelMixin, AbstractVariantSet):
         call_genotypes = [call.genotype for call in variant.calls]
 
         def gtlist_to_gtenum(gtlist):
-            hemi = [protocol.Genotype.HEMIZYGOUS_REF,
-                    protocol.Genotype.HEMIZYGOUS_ALT]
-            hetero = [protocol.Genotype.HOMOZYGOUS_REF,
-                      protocol.Genotype.HETEROZYGOUS_ALT,
-                      protocol.Genotype.HOMOZYGOUS_ALT]
+            hemi = [protocol.Genotype.Value('HEMIZYGOUS_REF'),
+                    protocol.Genotype.Value('HEMIZYGOUS_ALT')]
+            hetero = [protocol.Genotype.Value('HOMOZYGOUS_REF'),
+                      protocol.Genotype.Value('HETEROZYGOUS_ALT'),
+                      protocol.Genotype.Value('HOMOZYGOUS_ALT')]
 
+            if '.' in gtlist:
+                return protocol.Genotype.Value('NA')
             if len(gtlist) > 2:
-                return protocol.Genotype.OTHER
+                return protocol.Genotype.Value('OTHER')
 
-            sumgt = sum(gtlist)
+            sumgt = sum([int(gt) for gt in gtlist])
             if len(gtlist) == 1:
                 return hemi[sumgt]
             else:
                 return hetero[sumgt]
 
         genotype_list = [gtlist_to_gtenum(callgt) for callgt in call_genotypes]
-        variant.calls = []
+        # ideally, get rid of the variant calls - but even more ideally, don't go through that path at all
         gtmatrix = protocol.GenotypeMatrix()
         gtmatrix.nvariants = 1
         gtmatrix.nindividuals = len(genotype_list)
         gtmatrix.genotypes.extend(genotype_list)
-        return gtmatrix, variant
+        return gtmatrix, variant, callSetIds
 
     def getVariant(self, compoundId):
         if compoundId.reference_name in self._chromFileMap:

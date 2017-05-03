@@ -695,19 +695,24 @@ class Backend(object):
 
         genotyperows = []
         variants = []
-        for genotypemtx, variant, nextPageToken in objectGenerator(request):
+        callsetIds = None
+        for gt_variant, nextPageToken in objectGenerator(request):
+            genotypemtx, variant, callsetids = gt_variant
             genotyperows.append(genotypemtx)
+            variant.ClearField(b"calls")
             variants.append(variant)
+            if callsetIds is None:
+                callsetIds = callsetids
 
-        response.genotypes.nindividuals = len(genotyperows[0])
-        response.genotypes.nvariants = len(variants)
         for genotyperow in genotyperows:
-            response.genotypes.genotypes.extend(genotyperow)
+            response.genotypes.genotypes.extend(genotyperow.genotypes)
+        response.genotypes.nindividuals = len(genotyperows[0].genotypes)
+        response.genotypes.nvariants = len(variants)
 
-        for variant in variants:
-            response.variants.add(variant)
+        response.variants.extend(variants)
+        response.call_set_ids.extend(callsetIds)
 
-        response.next_page_token = nextPageToken
+        response.next_page_token = str(nextPageToken)
 
         return protocol.serialize(response, return_mimetype)
 
