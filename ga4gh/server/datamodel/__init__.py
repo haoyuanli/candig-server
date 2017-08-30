@@ -340,6 +340,16 @@ class BiosampleCompoundId(DatasetCompoundId):
     differentiator = 'b'
 
 
+class ExperimentCompoundId(DatasetCompoundId):
+    """
+    The compound id for an experiment
+    """
+    fields = DatasetCompoundId.fields + [
+        CompoundId.differentiatorFieldName, 'experiment']
+    containerIds = DatasetCompoundId.containerIds + [('experiment_id', 2)]
+    differentiator = 'e'
+
+
 class VariantAnnotationSetCompoundId(VariantSetCompoundId):
     """
     The compound id for a variant annotation set
