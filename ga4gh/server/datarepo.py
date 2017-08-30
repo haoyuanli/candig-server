@@ -39,6 +39,8 @@ class AbstractDataRepository(object):
         self._datasetIdMap = {}
         self._datasetNameMap = {}
         self._datasetIds = []
+        self._experimentIds = []
+        self._experimentNameMap = {}
         self._referenceSetIdMap = {}
         self._referenceSetNameMap = {}
         self._referenceSetIds = []
@@ -1214,6 +1216,9 @@ class SqlDataRepository(AbstractDataRepository):
     def _createBiosampleTable(self):
         self.database.create_table(models.Biosample)
 
+    def _createExperimentTable(self):
+        self.database.create_table(models.Experiment)
+
     def insertBiosample(self, biosample):
         """
         Inserts the specified Biosample into this repository.
@@ -1394,6 +1399,7 @@ class SqlDataRepository(AbstractDataRepository):
         self._createFeatureSetTable()
         self._createContinuousSetTable()
         self._createBiosampleTable()
+        self._createExperimentTable()
         self._createIndividualTable()
         self._createPhenotypeAssociationSetTable()
         self._createRnaQuantificationSetTable()
