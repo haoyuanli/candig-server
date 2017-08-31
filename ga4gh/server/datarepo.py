@@ -39,8 +39,6 @@ class AbstractDataRepository(object):
         self._datasetIdMap = {}
         self._datasetNameMap = {}
         self._datasetIds = []
-        self._experimentIds = []
-        self._experimentNameMap = {}
         self._referenceSetIdMap = {}
         self._referenceSetNameMap = {}
         self._referenceSetIds = []
@@ -48,6 +46,10 @@ class AbstractDataRepository(object):
         self._ontologyIdMap = {}
         self._ontologyIds = []
         self._peers = []
+        # these should eventually be "in" datasets, if not biosamples
+        # but will have to change the schema first
+        self._experimentIds = []
+        self._experimentNameMap = {}
 
     def addDataset(self, dataset):
         """
@@ -57,6 +59,15 @@ class AbstractDataRepository(object):
         self._datasetIdMap[id_] = dataset
         self._datasetNameMap[dataset.getLocalId()] = dataset
         self._datasetIds.append(id_)
+
+    def addExperiment(self, experiment):
+        """
+        Adds the specified experiment to this data repository.
+        """
+        id_ = experiment.getId()
+        self._experimentIdMap[id_] = experiment
+        self._experimentNameMap[experiment.getLocalId()] = experiment
+        self._experimentIds.append(id_)
 
     def addReferenceSet(self, referenceSet):
         """
@@ -80,6 +91,12 @@ class AbstractDataRepository(object):
         Returns a list of datasets in this data repository
         """
         return [self._datasetIdMap[id_] for id_ in self._datasetIds]
+
+    def getExperiments(self):
+        """
+        Returns a list of datasets in this data repository
+        """
+        return [self._experimentIdMap[id_] for id_ in self._experimentIds]
 
     def insertPeer(self, peer):
         """
@@ -140,6 +157,29 @@ class AbstractDataRepository(object):
         if name not in self._datasetNameMap:
             raise exceptions.DatasetNameNotFoundException(name)
         return self._datasetNameMap[name]
+
+    def getExperiment(self, id_):
+        """
+        Returns a experiment with the specified ID, or raises a
+        ExperimentNotFoundException if it does not exist.
+        """
+        if id_ not in self._experimentIdMap:
+            raise exceptions.ExperimentNotFoundException(id_)
+        return self._experimentIdMap[id_]
+
+    def getExperimentByIndex(self, index):
+        """
+        Returns the experiment at the specified index.
+        """
+        return self._experimentIdMap[self._experimentIds[index]]
+
+    def getExperimentByName(self, name):
+        """
+        Returns the experiment with the specified name.
+        """
+        if name not in self._experimentNameMap:
+            raise exceptions.ExperimentNameNotFoundException(name)
+        return self._experimentNameMap[name]
 
     def getReferenceSets(self):
         """
@@ -300,6 +340,11 @@ class AbstractDataRepository(object):
                             quant._description,
                             ",".join(quant._readGroupIds),
                             ",".join(quant._featureSetIds), sep="\t")
+        print("Experiments:")
+        for experiment in self.getExpeirments():
+            print(
+                "", experiment.getLocalId(), experiment.getId(),
+                experiment.getName(), experiment.getDescription(), sep="\t")
 
     def allReferences(self):
         """
@@ -638,6 +683,10 @@ class SqlDataRepository(AbstractDataRepository):
         """
         Verifies that the data in the repository is consistent.
         """
+        #
+        # TODO - verify experiments (but probably wait until they
+        # reside, properly, in datasets/biosamples)
+        #
         # TODO this should emit to a log that we can configure so we can
         # have verbosity levels. We should provide a way to configure
         # where we look at various chromosomes and so on. This will be
@@ -1250,6 +1299,39 @@ class SqlDataRepository(AbstractDataRepository):
             assert biosample.getId() == biosampleRecord.id
             dataset.addBiosample(biosample)
 
+    def insertExperiment(self, experiment):
+        """
+        Inserts the specified Experiment into this repository.
+        """
+        try:
+            models.Experiment.create(
+                id=experiment.getId(),
+                name=experiment.getName(),
+                description=experiment.getDescription(),
+                created=experiment.getCreated(),
+                updated=experiment.getUpdated(),
+                run_time=experiment.getRunTime(),
+                molecule=experiment.getMolecule(),
+                strategy=experiment.getStrategy(),
+                selection=experiment.getSelection(),
+                library=experiment.getLibrary(),
+                library_layout=experiment.getLibraryLayout(),
+                instrument_model=experiment.getInstrumentModel(),
+                instrument_data_file=experiment.getInstrumentDataFile(),
+                sequencing_center=experiment.getSequencingCenter(),
+                platform_unit=experiment.getPlatformUnit())
+        except Exception:
+            raise exceptions.DuplicateNameException(
+                experiment.getLocalId(),
+                experiment.getParentContainer().getLocalId())
+
+    def _readExperimentTable(self):
+        for experimentRecord in models.Experiment.select():
+            experiment = biodata.Experiment(experimentRecord.name)
+            experiment.populateFromRow(experimentRecord)
+            assert experiment.getId() == experimentRecord.id
+            self.addExperiment(experiment)
+
     def _createIndividualTable(self):
         self.database.create_table(models.Individual)
 
@@ -1433,6 +1515,7 @@ class SqlDataRepository(AbstractDataRepository):
         self._readReferenceSetTable()
         self._readReferenceTable()
         self._readDatasetTable()
+        self._readExperimentTable()
         self._readReadGroupSetTable()
         self._readReadGroupTable()
         self._readVariantSetTable()

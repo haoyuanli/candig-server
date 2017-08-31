@@ -125,8 +125,8 @@ class Experiment(datamodel.DatamodelObject):
     """
     compoundIdClass = datamodel.ExperimentCompoundId
 
-    def __init__(self, parentContainer, localId):
-        super(Biosample, self).__init__(parentContainer, localId)
+    def __init__(self, localId):
+        super(Biosample, self).__init__(None, localId)
         self._created = datetime.datetime.now().isoformat()
         self._updated = datetime.datetime.now().isoformat()
         self._runtime = datetime.datetime.now().isoformat()
