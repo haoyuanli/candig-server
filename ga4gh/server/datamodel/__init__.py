@@ -340,13 +340,13 @@ class BiosampleCompoundId(DatasetCompoundId):
     differentiator = 'b'
 
 
-class ExperimentCompoundId(DatasetCompoundId):
-    """
-    The compound id for an experiment
-    """
-    fields = [CompoundId.differentiatorFieldName, 'experiment']
-    containerIds = [('experiment_id', 2)]
-    differentiator = 'e'
+# class ExperimentCompoundId(CompoundId):
+#    """
+#    The compound id for an experiment
+#    """
+#    fields = ['experiment']
+#    containerIds = [('experiment_id', 0)]
+#    differentiator = 'x'
 
 
 class VariantAnnotationSetCompoundId(VariantSetCompoundId):
@@ -435,6 +435,14 @@ class ReadGroupCompoundId(ReadGroupSetCompoundId):
     """
     fields = ReadGroupSetCompoundId.fields + ['read_group']
     containerIds = ReadGroupSetCompoundId.containerIds + [('read_group_id', 3)]
+
+
+class ExperimentCompoundId(ReadGroupCompoundId):
+    """
+    The compound id for an experiment
+    """
+    fields = ReadGroupCompoundId.fields + ['experiment']
+    containerIds = ReadGroupCompoundId.containerIds + [('experiment_id', 3)]
 
 
 class ReadAlignmentCompoundId(ReadGroupSetCompoundId):
