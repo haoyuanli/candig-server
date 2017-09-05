@@ -344,9 +344,8 @@ class ExperimentCompoundId(DatasetCompoundId):
     """
     The compound id for an experiment
     """
-    fields = DatasetCompoundId.fields + [
-        CompoundId.differentiatorFieldName, 'experiment']
-    containerIds = DatasetCompoundId.containerIds + [('experiment_id', 2)]
+    fields = [CompoundId.differentiatorFieldName, 'experiment']
+    containerIds = [('experiment_id', 2)]
     differentiator = 'e'
 
 
@@ -436,14 +435,6 @@ class ReadGroupCompoundId(ReadGroupSetCompoundId):
     """
     fields = ReadGroupSetCompoundId.fields + ['read_group']
     containerIds = ReadGroupSetCompoundId.containerIds + [('read_group_id', 3)]
-
-
-class ExperimentCompoundId(ReadGroupCompoundId):
-    """
-    The compound id for an experiment
-    """
-    fields = ReadGroupCompoundId.fields + ['experiment']
-    containerIds = ReadGroupCompoundId.containerIds + [('experiment_id', 3)]
 
 
 class ReadAlignmentCompoundId(ReadGroupSetCompoundId):
