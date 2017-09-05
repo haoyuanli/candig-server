@@ -341,7 +341,7 @@ class AbstractDataRepository(object):
                             ",".join(quant._readGroupIds),
                             ",".join(quant._featureSetIds), sep="\t")
         print("Experiments:")
-        for experiment in self.getExpeirments():
+        for experiment in self.getExperiments():
             print(
                 "", experiment.getLocalId(), experiment.getId(),
                 experiment.getName(), experiment.getDescription(), sep="\t")
