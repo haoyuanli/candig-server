@@ -344,7 +344,7 @@ class ExperimentCompoundId(CompoundId):
     """
     The compound id for an experiment
     """
-    fields = ['experiment']
+    fields = ['experiment', 'differentiator']
     containerIds = [('experiment_id', 0)]
     differentiator = 'x'
 
