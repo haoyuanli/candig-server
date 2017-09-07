@@ -249,7 +249,7 @@ class Readgroup(BaseModel):
     biosampleid = pw.TextField(db_column='biosampleId', null=True)
     created = pw.TextField(null=True)
     description = pw.TextField(null=True)
-    experiment = pw.TextField()
+    experiment = pw.TextField(null=True)
     id = pw.TextField(primary_key=True)
     name = pw.TextField()
     predictedinsertsize = pw.IntegerField(

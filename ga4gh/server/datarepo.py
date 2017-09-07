@@ -970,8 +970,8 @@ class SqlDataRepository(AbstractDataRepository):
                 predictedinsertedsize=readGroup.getPredictedInsertSize(),
                 samplename=readGroup.getSampleName(),
                 description=readGroup.getDescription(),
-                stats=statsJson,
                 experiment=experimentJson,
+                stats=statsJson,
                 biosampleid=readGroup.getBiosampleId(),
                 attributes=json.dumps(readGroup.getAttributes()))
         except Exception as e:

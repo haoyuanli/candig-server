@@ -511,6 +511,15 @@ class RepoManager(object):
         individual.populateFromJson(self._args.individual)
         self._updateRepo(self._repo.insertIndividual, individual)
 
+    def addExperiment(self):
+        """
+        Adds a new individual into this repo
+        """
+        self._openRepo()
+        experiment = bio_metadata.Experiment(self._args.expirimentName)
+        experiment.populateFromJson(self._args.experiment)
+        self._updateRepo(self._repo.insertExperiment, experiment)
+
     def removeIndividual(self):
         """
         Removes an individual from this repo
