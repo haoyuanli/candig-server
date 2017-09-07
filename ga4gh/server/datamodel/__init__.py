@@ -344,9 +344,8 @@ class ExperimentCompoundId(CompoundId):
     """
     The compound id for an experiment
     """
-    fields = ['experiment', 'differentiator']
+    fields = ['experiment']
     containerIds = [('experiment_id', 0)]
-    differentiator = 'x'
 
 
 class VariantAnnotationSetCompoundId(VariantSetCompoundId):
