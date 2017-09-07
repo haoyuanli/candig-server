@@ -126,10 +126,10 @@ class Experiment(datamodel.DatamodelObject):
     compoundIdClass = datamodel.ExperimentCompoundId
 
     def __init__(self, localId):
-        super(Biosample, self).__init__(None, localId)
+        super(Experiment, self).__init__(None, localId)
         self._created = datetime.datetime.now().isoformat()
         self._updated = datetime.datetime.now().isoformat()
-        self._runtime = datetime.datetime.now().isoformat()
+        self._run_time = datetime.datetime.now().isoformat()
         self._molecule = None
         self._strategy = None
         self._selection = None
@@ -147,8 +147,8 @@ class Experiment(datamodel.DatamodelObject):
             id=self.getId(),
             name=self.getName(),
             description=self.getDescription(),
-            created=self.getCreated(),
-            updated=self.getUpdated(),
+            message_create_time=self.getCreated(),
+            message_update_time=self.getUpdated(),
             run_time=self.getRunTime(),
             molecule=self.getMolecule(),
             strategy=self.getStrategy(),
@@ -165,12 +165,12 @@ class Experiment(datamodel.DatamodelObject):
 
     def populateFromJson(self, jsonString):
         try:
-            parsed = protocol.fromJson(jsonString, protocol.Biosample)
+            parsed = protocol.fromJson(jsonString, protocol.Experiment)
         except:
             raise exceptions.InvalidJsonException(jsonString)
-        self._created = parsed.created
-        self._updated = parsed.updated
-        self._runtime = parsed.runtime
+        self._created = parsed.message_create_time
+        self._updated = parsed.message_update_time
+        self._run_time = parsed.run_time
         self._description = parsed.description
         self._molecule = parsed.molecule
         self._strategy = parsed.strategy
@@ -192,17 +192,17 @@ class Experiment(datamodel.DatamodelObject):
         # TODO coerce to types
         self._created = experimentRecord.created
         self._updated = experimentRecord.updated
-        self._runtime = experimentRecord.runtime
+        self._run_time = experimentRecord.runTime
         self._description = experimentRecord.description
         self._molecule = experimentRecord.molecule
         self._strategy = experimentRecord.strategy
         self._selection = experimentRecord.selection
         self._library = experimentRecord.library
-        self._library_layout = experimentRecord.library_layout
-        self._instrument_model = experimentRecord.instrument_model
-        self._instrument_data_file = experimentRecord.instrument_data_file
-        self._sequencing_center = experimentRecord.sequencing_center
-        self._platform_unit = experimentRecord.platform_unit
+        self._library_layout = experimentRecord.libraryLayout
+        self._instrument_model = experimentRecord.instrumentModel
+        self._instrument_data_file = experimentRecord.instrumentDataFile
+        self._sequencing_center = experimentRecord.sequencingCenter
+        self._platform_unit = experimentRecord.platformUnit
         self.setAttributesJson(experimentRecord.attributes)
         return self
 
@@ -213,10 +213,13 @@ class Experiment(datamodel.DatamodelObject):
         return self._updated
 
     def getRunTime(self):
-        return self._runtime
+        return self._run_time
 
     def getDescription(self):
         return self._description
+
+    def setDescription(self, description):
+        self._description = description
 
     def getName(self):
         return self._name

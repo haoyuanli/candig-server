@@ -90,7 +90,7 @@ class Experiment(BaseModel):
     description = pw.TextField(null=True)
     created = pw.TextField(null=True)
     updated = pw.TextField(null=True)
-    runtime = pw.TextField(null=True)
+    runTime = pw.TextField(null=True)
     molecule = pw.TextField(null=True)
     strategy = pw.TextField(null=True)
     selection = pw.TextField(null=True)

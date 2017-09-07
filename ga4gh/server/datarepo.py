@@ -696,6 +696,9 @@ class SqlDataRepository(AbstractDataRepository):
                 "Verifying Ontology", ontology.getName(),
                 "@", ontology.getDataUrl())
             # TODO how do we verify this? Check some well-know SO terms?
+        # TODO: how do we verify the experiments
+        for experiment in self.getExperiments():
+            print("Verifying Expt", experiment.getName())
         for referenceSet in self.getReferenceSets():
             print(
                 "Verifying ReferenceSet", referenceSet.getLocalId(),
@@ -1001,6 +1004,14 @@ class SqlDataRepository(AbstractDataRepository):
         """
         q = models.Biosample.delete().where(
             models.Biosample.id == biosample.getId())
+        q.execute()
+
+    def removeExperiment(self, experiment):
+        """
+        Removes the specified experiment from this repository.
+        """
+        q = models.Experiment.delete().where(
+            models.Experiment.id == experiment.getId())
         q.execute()
 
     def removeIndividual(self, individual):
