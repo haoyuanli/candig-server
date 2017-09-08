@@ -147,7 +147,6 @@ class Experiment(datamodel.DatamodelObject):
         return "%s(%r)" % (self.__class__, self.__dict__)
 
     def toProtocolElement(self):
-        print("self.getLibraryLayout() = ", self.getLibraryLayout())
         experiment = protocol.Experiment(
             id=self.getId(),
             name=self.getName(),
@@ -234,6 +233,9 @@ class Experiment(datamodel.DatamodelObject):
     def getMolecule(self):
         return self._molecule
 
+    def setMolecule(self, molecule):
+        self._molecule = molecule
+
     def getStrategy(self):
         return self._strategy
 
@@ -254,6 +256,9 @@ class Experiment(datamodel.DatamodelObject):
 
     def getSequencingCenter(self):
         return self._sequencing_center
+
+    def setSequencingCenter(self, centre):
+        self._sequencing_center = centre
 
     def getPlatformUnit(self):
         return self._platform_unit
