@@ -141,8 +141,13 @@ class Experiment(datamodel.DatamodelObject):
         self._sequencing_center = None
         self._platform_unit = None
         self._name = localId
+        self._attributes = {}
+
+    def __repr__(self):
+        return "%s(%r)" % (self.__class__, self.__dict__)
 
     def toProtocolElement(self):
+        print("self.getLibraryLayout() = ", self.getLibraryLayout())
         experiment = protocol.Experiment(
             id=self.getId(),
             name=self.getName(),
@@ -168,8 +173,10 @@ class Experiment(datamodel.DatamodelObject):
             parsed = protocol.fromJson(jsonString, protocol.Experiment)
         except:
             raise exceptions.InvalidJsonException(jsonString)
-        self._created = parsed.message_create_time
-        self._updated = parsed.message_update_time
+        if parsed.message_create_time != "":
+            self._created = parsed.message_create_time
+        if parsed.message_update_time != "":
+            self._updated = parsed.message_update_time
         self._run_time = parsed.run_time
         self._description = parsed.description
         self._molecule = parsed.molecule

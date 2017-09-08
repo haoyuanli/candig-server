@@ -37,6 +37,7 @@ class AbstractDataRepository(object):
     """
     def __init__(self):
         self._datasetIdMap = {}
+        self._datasetIdMap = {}
         self._datasetNameMap = {}
         self._datasetIds = []
         self._referenceSetIdMap = {}
@@ -50,6 +51,7 @@ class AbstractDataRepository(object):
         # but will have to change the schema first
         self._experimentIds = []
         self._experimentNameMap = {}
+        self._experimentIdMap = {}
 
     def addDataset(self, dataset):
         """
@@ -1326,15 +1328,14 @@ class SqlDataRepository(AbstractDataRepository):
                 strategy=experiment.getStrategy(),
                 selection=experiment.getSelection(),
                 library=experiment.getLibrary(),
-                library_layout=experiment.getLibraryLayout(),
-                instrument_model=experiment.getInstrumentModel(),
-                instrument_data_file=experiment.getInstrumentDataFile(),
-                sequencing_center=experiment.getSequencingCenter(),
-                platform_unit=experiment.getPlatformUnit())
+                libraryLayout=experiment.getLibraryLayout(),
+                instrumentModel=experiment.getInstrumentModel(),
+                instrumentData_file=experiment.getInstrumentDataFile(),
+                sequencingCenter=experiment.getSequencingCenter(),
+                platformUnit=experiment.getPlatformUnit())
         except Exception:
             raise exceptions.DuplicateNameException(
-                experiment.getLocalId(),
-                experiment.getParentContainer().getLocalId())
+                experiment.getLocalId(), None)
 
     def _readExperimentTable(self):
         for experimentRecord in models.Experiment.select():

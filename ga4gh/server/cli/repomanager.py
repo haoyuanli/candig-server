@@ -31,6 +31,8 @@ import ga4gh.server.repo.rnaseq2ga as rnaseq2ga
 
 import ga4gh.common.cli as common_cli
 
+import ga4gh.schemas.protocol as protocol
+
 
 def getNameFromPath(filePath):
     """
@@ -517,8 +519,8 @@ class RepoManager(object):
         """
         self._openRepo()
         experiment = bio_metadata.Experiment(self._args.experimentName)
-        experiment.setDescription(self._args.description)
         experiment.populateFromJson(self._args.experiment)
+        experiment.setDescription(self._args.description)
         self._updateRepo(self._repo.insertExperiment, experiment)
 
     def removeExperiment(self):

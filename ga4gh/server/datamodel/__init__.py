@@ -534,7 +534,10 @@ class DatamodelObject(object):
         """
         Sets the attributes dictionary from a JSON string.
         """
-        self._attributes = json.loads(attributesJson)
+        if attributesJson is not None:
+            self._attributes = json.loads(attributesJson)
+        else:
+            self._attributes = {}
 
     def serializeAttributes(self, msg):
         """
