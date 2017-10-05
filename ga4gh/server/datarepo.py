@@ -169,6 +169,12 @@ class AbstractDataRepository(object):
             raise exceptions.ExperimentNotFoundException(id_)
         return self._experimentIdMap[id_]
 
+    def getNumExperiments(self):
+        """
+        Returns the number of experiments in this data repository.
+        """
+        return len(self._experimentIds)
+
     def getExperimentByIndex(self, index):
         """
         Returns the experiment at the specified index.

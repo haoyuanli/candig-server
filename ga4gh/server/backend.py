@@ -1012,7 +1012,7 @@ class Backend(object):
         """
         return self.runSearchRequest(
             request, protocol.SearchExperimentsRequest,
-            protocol.SearchExperimentResponse,
+            protocol.SearchExperimentsResponse,
             self.experimentsGenerator)
 
     def runSearchFeatureSets(self, request):
