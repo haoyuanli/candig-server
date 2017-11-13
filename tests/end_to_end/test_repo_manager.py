@@ -50,7 +50,6 @@ class RepoManagerEndToEndTest(unittest.TestCase):
         self._runCmd("init")
         self._runCmd("list-announcements")
         self._runCmd("clear-announcements")
-        self._runCmd("add-peer", paths.peerUrl)
         self._runCmd("add-ontology", paths.ontologyPath)
         self._runCmd(
             "add-referenceset", paths.faPath,
@@ -97,7 +96,6 @@ class RepoManagerEndToEndTest(unittest.TestCase):
 
         self._runCmd("verify")
         self._runCmd("list")
-        self._runCmd("remove-peer", paths.peerUrl, "-f")
         self._runCmd(
             "remove-phenotypeassociationset",
             self.datasetName, phenotypeAssociationSetName, "-f")
