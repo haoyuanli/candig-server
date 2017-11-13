@@ -1371,7 +1371,6 @@ class SqlDataRepository(AbstractDataRepository):
         """
         self._checkWriteMode()
         self._createSystemTable()
-        self._createNetworkTables()
         self._createOntologyTable()
         self._createReferenceSetTable()
         self._createReferenceTable()
