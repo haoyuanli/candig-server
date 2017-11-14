@@ -1029,14 +1029,15 @@ class Backend(object):
             self.datasetsGenerator,
             return_mimetype)
 
-    def runSearchExperiments(self, request):
+    def runSearchExperiments(self, request, return_mimetype):
         """
         Runs the specified SearchExperimentsRequest.
         """
         return self.runSearchRequest(
             request, protocol.SearchExperimentsRequest,
             protocol.SearchExperimentsResponse,
-            self.experimentsGenerator)
+            self.experimentsGenerator,
+            return_mimetype)
 
     def runSearchFeatureSets(self, request, return_mimetype):
         """
