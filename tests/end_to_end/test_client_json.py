@@ -568,8 +568,3 @@ class TestClientJson(TestClientOutput):
                     [rnaQuantificationSet],
                     "rnaquantificationsets-get",
                     rnaQuantificationSet.id)
-
-    def testInfo(self):
-        info = self._client.get_info()
-        cliString = "get-info"
-        self.verifyParsedOutputsEqual([info], cliString)

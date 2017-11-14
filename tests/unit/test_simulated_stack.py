@@ -1268,14 +1268,6 @@ class TestSimulatedStack(unittest.TestCase):
                 for clientAssoc in responseData.associations:
                     self.assertEqual(clientAssoc, repoAssoc)
 
-    def testInfo(self):
-        path = "/info"
-        response = self.app.get(path)
-        responseData = self.deserialize(response,
-                                        protocol.GetInfoResponse)
-        self.assertIsNotNone(responseData)
-        self.assertEqual(responseData.protocol_version, protocol.version)
-
     # TODO def testSearchGenotypePhenotypes(self):
 
     # TODO def testGetExpressionLevel(self):
