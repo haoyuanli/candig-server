@@ -766,7 +766,7 @@ class RepoManager(object):
     def addAnalysisArgument(cls, subparser):
         subparser.add_argument(
             "analysis",
-            help="the JSON of the experiment")
+            help="the JSON of the analysis")
 
     @classmethod
     def addIndividualArgument(cls, subparser):
