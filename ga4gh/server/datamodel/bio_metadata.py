@@ -305,9 +305,9 @@ class Analysis(datamodel.DatamodelObject):
         if parsed.created != "":
             self._created = parsed.created
         if parsed.updated != "":
-            self._updated = parsed.updaetd
+            self._updated = parsed.updated
         self._description = parsed.description
-        self._name = parsed.description
+        self._name = parsed.name
         self._type = parsed.type
         self._software = parsed.software
         attributes = {}

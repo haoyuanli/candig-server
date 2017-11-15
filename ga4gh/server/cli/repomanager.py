@@ -536,6 +536,7 @@ class RepoManager(object):
         self._openRepo()
         analysis = bio_metadata.Analysis(self._args.analysisName)
         analysis.populateFromJson(self._args.analysis)
+        analysis.setName(self._args.analysisName)
         analysis.setDescription(self._args.description)
         self._updateRepo(self._repo.insertAnalysis, analysis)
 
