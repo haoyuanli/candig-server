@@ -158,7 +158,7 @@ class Backend(object):
         """
         return self._topLevelObjectGenerator(
             request, self.getDataRepository().getNumAnalyses(),
-            self.getDataRepository().getAnalysesByIndex)
+            self.getDataRepository().getAnalysisByIndex)
 
     def biosamplesGenerator(self, request):
         dataset = self.getDataRepository().getDataset(request.dataset_id)
