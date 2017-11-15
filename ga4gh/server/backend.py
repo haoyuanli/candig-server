@@ -149,6 +149,17 @@ class Backend(object):
             request, self.getDataRepository().getNumExperiments(),
             self.getDataRepository().getExperimentByIndex)
 
+    def analysesGenerator(self, request):
+        """
+        Returns a generator over the (analysis, nextPageToken) pairs
+        defined by the specified request
+        TODO: This should really be under the appropriate biosamples, but
+        for now..
+        """
+        return self._topLevelObjectGenerator(
+            request, self.getDataRepository().getNumAnalyses(),
+            self.getDataRepository().getAnalysesByIndex)
+
     def biosamplesGenerator(self, request):
         dataset = self.getDataRepository().getDataset(request.dataset_id)
         results = []
@@ -856,6 +867,13 @@ class Backend(object):
         experiment = self.getDataRepository().getExperiment(id_)
         return self.runGetRequest(experiment)
 
+    def runGetAnalysis(self, id_):
+        """
+        Runs a getAnalysis request for the specified ID.
+        """
+        analysis = self.getDataRepository().getAnalysis(id_)
+        return self.runGetRequest(analysis)
+
     def runGetVariantAnnotationSet(self, id_,
                                    return_mimetype="application/json"):
         """
@@ -1037,6 +1055,16 @@ class Backend(object):
             request, protocol.SearchExperimentsRequest,
             protocol.SearchExperimentsResponse,
             self.experimentsGenerator,
+            return_mimetype)
+
+    def runSearchAnalyses(self, request, return_mimetype):
+        """
+        Runs the specified SearchAnalysesRequest.
+        """
+        return self.runSearchRequest(
+            request, protocol.SearchAnalysesRequest,
+            protocol.SearchAnalysesResponse,
+            self.analysesGenerator,
             return_mimetype)
 
     def runSearchFeatureSets(self, request, return_mimetype):
