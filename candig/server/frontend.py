@@ -586,6 +586,9 @@ def federation(endpoint, request, return_mimetype, request_type='POST'):
                     responseObject['status']['Queried peers']:
                 responseObject['status']['Valid response'] = True
 
+    if request_dictionary.headers.get('X-No-Federation', '') != '':
+        return json.dumps(responseObject['results'])
+
     return json.dumps(responseObject)
 
 
