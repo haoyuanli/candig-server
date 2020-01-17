@@ -32,11 +32,17 @@ class TestIntegrationApi(unittest.TestCase):
         token_endpoint = '{}/auth/token'.format(TYK_HOST)
         headers = {'Content-type': 'application/json'}
         body = {'username': username, 'password': password}
+
+        logger.info('endpoint', token_endpoint)
+
         r = requests.post(token_endpoint, data=json.dumps(body), headers=headers)
+
+        logger.info('raw res', r)
+
         r_json = r.json()
 
         logger.info('response json', r_json)
-        
+
         self.assertIsNot(type(r_json), str)
         return {"code": r.status_code, "body": r_json}
 
