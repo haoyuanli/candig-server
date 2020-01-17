@@ -41,7 +41,7 @@ class TestIntegrationApi(unittest.TestCase):
 
         r_json = r.json()
 
-        logger.info('response json', r_json)
+        # logger.info('response json', r_json)
 
         self.assertIsNot(type(r_json), str)
         return {"code": r.status_code, "body": r_json}
