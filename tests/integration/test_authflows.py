@@ -37,7 +37,8 @@ class TestIntegrationApi(unittest.TestCase):
 
         r = requests.post(token_endpoint, data=json.dumps(body), headers=headers)
 
-        logger.info('raw res', r)
+        logger.info('res url', r.url)
+        logger.info('res text', r.text)
 
         r_json = r.json()
 
