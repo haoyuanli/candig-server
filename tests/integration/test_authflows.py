@@ -33,12 +33,16 @@ class TestIntegrationApi(unittest.TestCase):
         headers = {'Content-type': 'application/json'}
         body = {'username': username, 'password': password}
 
-        logger.info('endpoint', token_endpoint)
+        logger.info(token_endpoint)
+        logger.info('above is token endpoint')
 
         r = requests.post(token_endpoint, data=json.dumps(body), headers=headers)
 
-        logger.info('res url', r.url)
-        logger.info('res text', r.text)
+        logger.info(r.url)
+        logger.info('above is r url')
+
+        logger.info(r.text)
+        logger.info('above is r text')
 
         r_json = r.json()
 
@@ -114,6 +118,10 @@ class TestIntegrationApi(unittest.TestCase):
         test_endpoint = '{}/datasets/search'.format(TYK_HOST)
 
         r = requests.post(test_endpoint, data=json.dumps({}))
+
+        logger.info(r.text)
+        logger.info("above is res text")
+
         self.assertIn(r.status_code, [401, 403])
 
         r = requests.post(test_endpoint, data=json.dumps({}), headers=headers)
