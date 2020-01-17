@@ -34,6 +34,9 @@ class TestIntegrationApi(unittest.TestCase):
         body = {'username': username, 'password': password}
         r = requests.post(token_endpoint, data=json.dumps(body), headers=headers)
         r_json = r.json()
+
+        logger.info('response json', r_json)
+        
         self.assertIsNot(type(r_json), str)
         return {"code": r.status_code, "body": r_json}
 
@@ -92,6 +95,7 @@ class TestIntegrationApi(unittest.TestCase):
         Ensure that the testing KC server has a test user loaded into it
         """
         login_response = self.api_login(TEST_USER, TEST_PW)
+        logger.info('response', login_response)
         self.assertEqual(login_response["code"], 200)
         # token = login_response["body"].get("id_token")
         token = login_response["body"].get("id_token")
