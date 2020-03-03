@@ -49,5 +49,5 @@ EXPOSE 8080
 
 EXPOSE $PORT
 
-ENTRYPOINT ["candig_server", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["candig_server", "--host", "0.0.0.0", "--port", $PORT]
 CMD  ["--workers", "1",  "--gunicorn", "-c", "NoAuth"]
