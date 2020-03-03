@@ -16,8 +16,7 @@ ENV INGEST_V=v1.3.0
 RUN pip install git+https://github.com/CanDIG/candig-ingest.git@${INGEST_V}#egg=candig_ingest \
   gevent
 
-COPY . /tmp/server
-RUN cd /tmp/server/ && pip install .
+RUN pip install git+https://github.com/haoyuanli/candig-server.git@master
 
 RUN mkdir /data
 WORKDIR /data
