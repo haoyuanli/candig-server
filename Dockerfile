@@ -47,6 +47,7 @@ WORKDIR /data
 
 EXPOSE $PORT
 
-ENTRYPOINT ["candig_server", "--port", $PORT, "--workers", "1",  "--gunicorn", "-c", "NoAuth"]
+ENTRYPOINT ["candig_server", "--port", $PORT]
+CMD ["--workers", "1",  "--gunicorn", "-c", "NoAuth"]
 
 
