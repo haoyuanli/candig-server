@@ -45,9 +45,6 @@ COPY --from=0 /usr/local /usr/local
 
 WORKDIR /data
 
-EXPOSE 8080
-
 EXPOSE $PORT
 
-ENTRYPOINT ["candig_server", "--host", "0.0.0.0", "--port", $PORT]
-CMD  ["--workers", "1",  "--gunicorn", "-c", "NoAuth"]
+CMD  ["candig_server", "--host", "0.0.0.0", "--port", $PORT, "--workers", "1",  "--gunicorn", "-c", "NoAuth"]
