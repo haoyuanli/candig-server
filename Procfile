@@ -1,0 +1,1 @@
+web: candig-server --port $PORT --gunicorn

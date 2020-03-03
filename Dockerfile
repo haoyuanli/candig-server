@@ -12,8 +12,7 @@ RUN yum -y install \
  libxml2-devel.x86_64 libxslt-devel.x86_64  libcurl-devel.x86_64 make gcc \ 
  && pip3 install --upgrade pip setuptools
 
-ENV INGEST_V=v1.3.0
-RUN pip install git+https://github.com/CanDIG/candig-ingest.git@${INGEST_V}#egg=candig_ingest \
+RUN pip install candig-ingest \
   gevent
 
 RUN pip install git+https://github.com/haoyuanli/candig-server.git@master
@@ -23,9 +22,14 @@ WORKDIR /data
 RUN mkdir  mkdir candig-example-data \
   && touch access_list.tsv
 
-RUN curl -Lo /tmp/mock_data.json  https://github.com/CanDIG/candig-ingest/releases/download/${INGEST_V}/mock_data.json \
- && ingest candig-example-data/registry.db mock_data /tmp/mock_data.json
+RUN curl -Lo /tmp/clinical_metadata_tier3.json  https://raw.githubusercontent.com/CanDIG/candig-ingest/master/candig/ingest/mock_data/clinical_metadata_tier3.json \
+ && ingest candig-example-data/registry.db mock1 /tmp/clinical_metadata_tier3.json
 
+RUN curl -Lo /tmp/pipeline_metadata_tier3.json  https://raw.githubusercontent.com/CanDIG/candig-ingest/master/candig/ingest/mock_data/pipeline_metadata_tier3.json \
+ && ingest candig-example-data/registry.db mock1 /tmp/pipeline_metadata_tier3.json
+
+RUN candig_repo add-peer candig-example-data/registry.db https://test-app-569.herokuapp.com
+RUN candig_repo add-peer candig-example-data/registry.db https://test-app-570.herokuapp.com
 
 FROM centos:7.6.1810
 RUN yum -y update && yum -y install epel-release
@@ -45,10 +49,6 @@ COPY --from=0 /usr/local /usr/local
 
 WORKDIR /data
 
-EXPOSE 8080
 EXPOSE $PORT
 
-ENTRYPOINT ["candig_server", "--gunicorn"]
-CMD ["--port", $PORT]
-
-
+CMD ["candig_server", "--port", $PORT, "--gunicorn"]
