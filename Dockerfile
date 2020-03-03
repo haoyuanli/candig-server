@@ -48,7 +48,5 @@ WORKDIR /data
 EXPOSE 8080
 EXPOSE $PORT
 
-ENTRYPOINT ["candig_server", "--gunicorn"]
-CMD ["--port", $PORT]
-
+ENTRYPOINT ["candig_server", "--port", $PORT, "--gunicorn"]
 
