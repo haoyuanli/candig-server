@@ -336,10 +336,22 @@ class EnrollmentNotFoundException(NotFoundException):
             enrollmentId)
 
 
+class ClinicalLocalIdNotFoundException(NotFoundException):
+    def __init__(self, table, name):
+        self.message = "The requested {} '{}' was not found".format(
+            table, name)        
+
+
 class ConsentNotFoundException(NotFoundException):
     def __init__(self, consentId):
         self.message = "The requested Consent '{}' was not found".format(
             consentId)
+
+
+class ConsentNameNotFoundException(NotFoundException):
+    def __init__(self, consentName):
+        self.message = "The requested Consent name '{}' was not found".format(
+            consentName)
 
 
 class DiagnosisNotFoundException(NotFoundException):
@@ -834,6 +846,19 @@ class MultipleReferenceSetsInReadGroupSet(MalformedException):
             "The BAM file '{}' contains the referenceSets '{}' and "
             "'{}'; at most one referenceSet per file is allowed.".format(
                 fileName, referenceSetName, otherReferenceSetName))
+
+
+class InvalidAccessListException(MalformedException):
+    """
+    The user has specified a non-supported access list level.
+    """
+    def __init__(self, level):
+        self.message = (
+            "You may only specify one of X, 0, 1, 2, 3, 4 to describe the "
+            "authorization level of a user, but you specified {} in your access_list.\n"
+            "Deprecation notice: if you still specify an empty value to indicate no access, "
+            "please change it to X, the support for empty value will be removed in the future release.".format(
+                level))
 
 # Internal errors. These are exceptions that we regard as bugs.
 

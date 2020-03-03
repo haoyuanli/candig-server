@@ -2,6 +2,8 @@
 
 $(window).on('load', function() {
 
+    changeClass("nav_2");
+
     makeRequest("datasets/search", {}).then(function(response) {
 
         const data = JSON.parse(response);
@@ -39,7 +41,7 @@ function refreshDataset(datasetIndex) {
     datasetId = finalDatasetId[datasetIndex];
     document.getElementById("warningMsg").style.display = "none";
     setCookie("datasetId", datasetId);
-    $('#dropdownMenuLink').html('<i class="fas fa-database"></i> ' + finalDatasetName[finalDatasetId.indexOf(getCookie("datasetId"))]);
+    location.reload();
 }
 
 
@@ -403,7 +405,6 @@ var statusCode = 0; // Initial value, table is empty
                 fastaURL: "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/1kg_v37/human_g1k_v37_decoy.fasta",
                 cytobandURL: "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/b37/b37_cytoband.txt"
             },
-            oauthToken: session_id,
             showRuler: true,
             tracks: tracks
         };
