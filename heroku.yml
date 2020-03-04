@@ -3,3 +3,4 @@ build:
     web: Dockerfile
 run:
   web: candig_server --host 0.0.0.0 --port $PORT --gunicorn
+    image: web
