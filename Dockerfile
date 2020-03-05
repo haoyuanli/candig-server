@@ -29,8 +29,8 @@ RUN curl -Lo /tmp/clinical_metadata_tier1.json  https://raw.githubusercontent.co
 RUN curl -Lo /tmp/pipeline_metadata_tier1.json  https://raw.githubusercontent.com/CanDIG/candig-ingest/master/candig/ingest/mock_data/pipeline_metadata_tier1.json \
  && ingest candig-example-data/registry.db mock1 /tmp/pipeline_metadata_tier1.json
 
-ingest candig-example-data/registry.db mock2 /tmp/clinical_metadata_tier1.json
-ingest candig-example-data/registry.db mock2 /tmp/pipeline_metadata_tier1.json
+RUN ingest candig-example-data/registry.db mock2 /tmp/clinical_metadata_tier1.json
+RUN ingest candig-example-data/registry.db mock2 /tmp/pipeline_metadata_tier1.json
 
 
 RUN candig_repo add-peer candig-example-data/registry.db https://test-app-570.herokuapp.com
