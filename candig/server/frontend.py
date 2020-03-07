@@ -785,12 +785,12 @@ class FederationResponse(object):
         async_session = FuturesSession(max_workers=10)  # capping max threads
         if request_type == "GET":
             responses = [
-                async_session.get(uri, headers=header, timeout=15)
+                async_session.get(uri, headers=header, timeout=2)
                 for uri in uri_list
             ]
         elif request_type == "POST":
             responses = [
-                async_session.post(uri, json=json.loads(self.request), headers=header, timeout=15)
+                async_session.post(uri, json=json.loads(self.request), headers=header, timeout=2)
                 for uri in uri_list
             ]
         else:
